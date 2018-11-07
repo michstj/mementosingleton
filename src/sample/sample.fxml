@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.ListView?>
+<?import javafx.scene.control.TextArea?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.layout.ColumnConstraints?>
+<?import javafx.scene.layout.GridPane?>
+<?import javafx.scene.layout.Pane?>
+<?import javafx.scene.layout.RowConstraints?>
+<?import javafx.scene.text.Font?>
+
+<GridPane alignment="center" hgap="10" vgap="10" xmlns="http://javafx.com/javafx/8.0.121" xmlns:fx="http://javafx.com/fxml/1" fx:controller="sample.Controller">
+   <children>
+      <Pane prefHeight="500.0" prefWidth="500.0" GridPane.hgrow="ALWAYS">
+         <children>
+            <TextField fx:id="titel" layoutX="29.0" layoutY="52.0" promptText="Titel" />
+            <Button fx:id="neuerEIntrag" layoutX="25.0" layoutY="146.0" mnemonicParsing="false" onAction="#neuerEintrag" text="Erstellen" />
+            <ListView fx:id="table" layoutX="291.0" layoutY="250.0" onEditStart="#loadData" onMouseClicked="#selected" prefHeight="200.0" prefWidth="200.0" />
+            <Button fx:id="reload" layoutX="108.0" layoutY="146.0" mnemonicParsing="false" onAction="#loadData" text="Aktualisieren" />
+            <Label fx:id="ausgabe" layoutX="233.0" layoutY="297.0" prefHeight="107.0" prefWidth="237.0">
+               <font>
+                  <Font size="24.0" />
+               </font></Label>
+            <TextArea fx:id="texteingabe" layoutX="17.0" layoutY="186.0" onKeyReleased="#stateSetzen" prefHeight="291.0" prefWidth="259.0" />
+            <TextField fx:id="autor" layoutX="29.0" layoutY="89.0" promptText="Autor" />
+            <Button fx:id="Save" layoutX="291.0" layoutY="146.0" mnemonicParsing="false" onAction="#stateSpeichern" text="Save State" />
+            <Button fx:id="Restore" layoutX="291.0" layoutY="186.0" mnemonicParsing="false" onAction="#stateRestore" text="Restore to last Save" />
+            <Button fx:id="setState" layoutX="291.0" layoutY="101.0" mnemonicParsing="false" onAction="#stateSetzen" text="Set State" />
+            <Button fx:id="delete" layoutX="192.0" layoutY="146.0" mnemonicParsing="false" onAction="#deleteNotiz" text="löschen" />
+         </children></Pane>
+   </children>
+   <columnConstraints>
+      <ColumnConstraints />
+   </columnConstraints>
+   <rowConstraints>
+      <RowConstraints />
+   </rowConstraints>
+</GridPane>
