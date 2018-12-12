@@ -4,6 +4,7 @@ import javafx.fxml.FXML;
 import javafx.scene.control.*;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import javax.swing.JOptionPane;
 
 import java.sql.*;
 
@@ -16,8 +17,11 @@ public class Controller {
     @FXML public TextField titel;
     @FXML public TextField autor;
     @FXML public TextArea texteingabe;
+    @FXML public TextArea ausgabeState;
     @FXML public ListView table;
+    @FXML public ListView table2;
     @FXML public Label ausgabe;
+    private int currID;
 
     Connection myConn = Singleton.getConn();
     Caretaker caretaker = new Caretaker();
@@ -25,6 +29,7 @@ public class Controller {
 
 
     ObservableList<Model> daten = FXCollections.observableArrayList();
+    ObservableList<Model> versionen = FXCollections.observableArrayList();
 
 
     /**
@@ -40,9 +45,16 @@ public class Controller {
         ps.setString(2,autor.getText());
         ps.setString(3,titel.getText());
         ps.setString(4,texteingabe.getText());
-        ps.executeUpdate();
 
-        ausgabe.setText("Insert Complete.");
+
+        if (autor.getText().length() >= 1&& titel.getText().length() >= 1)
+        {
+            ps.executeUpdate();
+        }
+        else{
+            JOptionPane.showMessageDialog(null, "Bitte Titel und Autor eintragen!", "Fehler:", JOptionPane.INFORMATION_MESSAGE);
+        }
+
 
         ps.close();
 
@@ -65,11 +77,17 @@ public class Controller {
                 }
 
 
+
         table.getItems().clear();
+
 
         for (int i = 0; i < daten.size(); i++) {
 
             table.getItems().addAll(daten.get(i));
+        }
+        for (int i = 0; i < versionen.size(); i++) {
+
+            table2.getItems().addAll(caretaker.mementos.get(i));
         }
 
 
@@ -83,15 +101,52 @@ public class Controller {
     public void deleteNotiz() throws SQLException {
 
 
-        PreparedStatement ps = myConn.prepareStatement("DELETE FROM notizen WHERE autor = ? AND titel = ?");
+        PreparedStatement ps = myConn.prepareStatement("DELETE FROM notizen WHERE autor = ? AND titel = ? AND text = ?");
+
         ps.setString(1,autor.getText());
         ps.setString(2,titel.getText());
-        ps.executeUpdate();
+        ps.setString(3,texteingabe.getText());
+
+        if (autor.getText().length() >= 1 && titel.getText().length() >= 1 && texteingabe.getText().length() >= 1)
+        {
+            ps.executeUpdate();
+        }
+        else{
+            JOptionPane.showMessageDialog(null, "sepp", "InfoBox: " + "soacha", JOptionPane.INFORMATION_MESSAGE);
+        }
+
 
         ps.close();
 
         loadData();
     }
+
+    public void updateNotiz() throws SQLException {
+        Model model = (Model) table.getSelectionModel().getSelectedItem();
+        int id = model.getId();
+
+
+        PreparedStatement ps = myConn.prepareStatement("UPDATE notizen SET autor = ?, titel = ?, text = ? WHERE id = ?;");
+
+        ps.setString(1,autor.getText());
+        ps.setString(2,titel.getText());
+        ps.setString(3,texteingabe.getText());
+        ps.setInt(4,id);
+
+        if (autor.getText().length() >= 1 && titel.getText().length() >= 1 && texteingabe.getText().length() >= 1)
+        {
+            ps.executeUpdate();
+        }
+        else{
+            JOptionPane.showMessageDialog(null, "sepp", "InfoBox: " + "soacha", JOptionPane.INFORMATION_MESSAGE);
+        }
+
+
+        ps.close();
+
+        loadData();
+    }
+
 
     /**
      * Die Daten von dem in der ListView ausgeähltem Objekt werden hier wieder in die zugehörigen input-Felder geschoben und können wieder bearbeitet werden.
@@ -101,6 +156,7 @@ public class Controller {
         titel.setText(""+model.getTitel());
         autor.setText(""+model.getAutor());
         texteingabe.setText(""+model.getText());
+        currID = model.getId();
 
     }
 
@@ -117,6 +173,7 @@ public class Controller {
      */
     public void stateSpeichern(){
         caretaker.addMemento(originator.save());
+        ausgabeState.setText(texteingabe.getText());
     }
 
     /**

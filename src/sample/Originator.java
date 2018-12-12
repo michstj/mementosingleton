@@ -26,7 +26,7 @@ class Originator {
 
     /**
      * Stellt Mementos die über den Parameter übergeben werden wieder her
-     * @param m sagt aus welcher Memenro wiederhergestellt werden soll
+     * @param m sagt aus welcher Memento wiederhergestellt werden soll
      */
     public void restore(Memento m) {
         state = m.getState();

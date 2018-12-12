@@ -5,7 +5,7 @@ import java.util.ArrayList;
  * Speichert alle Mementos in einer ArrayList vom Typ Memento
  */
 class Caretaker {
-    private ArrayList<Memento> mementos = new ArrayList<>();
+    public ArrayList<Memento> mementos = new ArrayList<>();
 
     /**
      * Fügt der ArrayList ein übergebenes Memento hinzu
